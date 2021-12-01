@@ -79,6 +79,8 @@ private:
     void updateChain();
 
     juce::Image background;
+
+    juce::Rectangle<int> getRenderArea();
 };
 
 //==============================================================================

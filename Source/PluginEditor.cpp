@@ -311,7 +311,7 @@ void ResponseCurveComponent::resized()
     {
         auto normX = mapFromLog10(f, 20.f, 20000.f);
 
-        g.drawVerticalLine(getWidth() * normX, 0.f, getHeight());
+        //g.drawVerticalLine(getWidth() * normX, 0.f, getHeight());
     }
 
     Array<float> gain
@@ -322,8 +322,18 @@ void ResponseCurveComponent::resized()
     for (auto gDb : gain)
     {
         auto y = jmap(gDb, -24.f, 24.f, float(getHeight()), 0.f);
-        g.drawHorizontalLine(y, 0, getWidth());
+        //g.drawHorizontalLine(y, 0, getWidth());
     }
+}
+
+juce::Rectangle<int> ResponseCurveComponent::getRenderArea()
+{
+    auto bounds = getLocalBounds();
+
+    bounds.reduce(JUCE_LIVE_CONSTANT(5),
+                  JUCE_LIVE_CONSTANT(5));
+
+    return bounds;
 }
 
 //==============================================================================
