@@ -236,7 +236,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
     g.drawImage(background, getLocalBounds().toFloat());
 
     //auto responseArea = getLocalBounds();
-    auto responseArea = getRenderArea();
+    auto responseArea = getAnalysisArea(); //getRenderArea();
 
     auto w = responseArea.getWidth();
 
@@ -286,7 +286,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
     }
 
     g.setColour(Colours::orange);
-    g.drawRoundedRectangle(responseArea.toFloat(), 4.f, 1.f);
+    g.drawRoundedRectangle(getRenderArea().toFloat(), 4.f, 1.f);
 
     g.setColour(Colours::white);
     g.strokePath(responseCurve, PathStrokeType(2.f));
@@ -333,10 +333,22 @@ juce::Rectangle<int> ResponseCurveComponent::getRenderArea()
 {
     auto bounds = getLocalBounds();
 
-    bounds.reduce(10, //JUCE_LIVE_CONSTANT(5),
-                  8 //JUCE_LIVE_CONSTANT(5)
-                  );
+    //bounds.reduce(10, //JUCE_LIVE_CONSTANT(5),
+    //              8 //JUCE_LIVE_CONSTANT(5)
+    //              );
+    bounds.removeFromTop(12);
+    bounds.removeFromBottom(2);
+    bounds.removeFromLeft(20);
+    bounds.removeFromRight(20);
 
+    return bounds;
+}
+
+juce::Rectangle<int> ResponseCurveComponent::getAnalysisArea()
+{
+    auto bounds = getRenderArea();
+    bounds.removeFromTop(4);
+    bounds.removeFromBottom(4);
     return bounds;
 }
 
