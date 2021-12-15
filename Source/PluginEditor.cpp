@@ -307,12 +307,28 @@ void ResponseCurveComponent::resized()
         20000
     };
 
-    g.setColour(Colours::white);
+    auto renderArea = getAnalysisArea();
+    auto left = renderArea.getX();
+    auto right = renderArea.getRight();
+    auto top = renderArea.getY();
+    auto bottom = renderArea.getBottom();
+    auto width = renderArea.getWidth();
+
+    Array<float> xs;
     for (auto f : freqs)
     {
         auto normX = mapFromLog10(f, 20.f, 20000.f);
+        xs.add(left + width * normX);
+    }
+
+    g.setColour(Colours::dimgrey);
+    //for (auto f : freqs)
+    for ( auto x : xs)
+    {
+        //auto normX = mapFromLog10(f, 20.f, 20000.f);
 
         //g.drawVerticalLine(getWidth() * normX, 0.f, getHeight());
+        g.drawVerticalLine(x, top, bottom);
     }
 
     Array<float> gain
@@ -322,11 +338,13 @@ void ResponseCurveComponent::resized()
 
     for (auto gDb : gain)
     {
-        auto y = jmap(gDb, -24.f, 24.f, float(getHeight()), 0.f);
+        auto y = jmap(gDb, -24.f, 24.f, float(bottom), float(top));
         //g.drawHorizontalLine(y, 0, getWidth());
+        g.setColour(gDb == 0.f ? Colour(0u, 172u, 1u) : Colours::darkgrey);
+        g.drawHorizontalLine(y, left, right);
     }
 
-    g.drawRect(getRenderArea());
+    //g.drawRect(getAnalysisArea());
 }
 
 juce::Rectangle<int> ResponseCurveComponent::getRenderArea()
